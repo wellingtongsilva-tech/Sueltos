@@ -2,283 +2,543 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sueltos em SP - Site Oficial</title>
-    <meta name="description" content="Grupo musical Sueltos em SP e Bloco de Carnaval">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>App Sueltos em SP</title>
+    <meta name="theme-color" content="#002266">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Ícones e Fontes -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --primary-blue: #002266;
             --primary-gold: #D4AF37;
             --accent-gold: #FFD700;
-            --light-bg: #f4f4f9;
-            --text-dark: #1a1a1a;
+            --bg-light: #F4F4F9;
+            --surface-white: #FFFFFF;
+            --text-dark: #1F2937;
+            --text-grey: #6B7280;
+            --success-green: #10B981;
+            
+            /* Tamanho da barra de navegação */
+            --nav-height: 65px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--light-bg);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
             color: var(--text-dark);
-            line-height: 1.6;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        /* HEADER */
-        header {
+        /* --- HEADER DO APP --- */
+        .app-header {
             background-color: var(--primary-blue);
-            padding: 1rem 5%;
+            color: white;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 50;
         }
 
-        .logo {
-            font-size: 1.5rem;
+        .header-logo {
             font-weight: 800;
-            color: var(--primary-gold);
-            text-decoration: none;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        nav ul {
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background-color: var(--primary-gold);
+            border-radius: 50%;
             display: flex;
-            list-style: none;
-            gap: 20px;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--accent-gold);
-        }
-
-        /* HERO SECTION */
-        .hero {
-            background: linear-gradient(rgba(0, 34, 102, 0.8), rgba(0, 34, 102, 0.9)), url('image_d0e8af.jpg');
-            background-size: cover;
-            background-position: center;
-            height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            text-align: center;
-            color: white;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-blue);
+            border: 2px solid white;
+        }
+
+        /* --- ÁREA DE CONTEÚDO (SCROLL) --- */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: calc(var(--nav-height) + 20px); /* Espaço para não cortar conteúdo */
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        /* Views (Abas) */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
             padding: 20px;
         }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            color: var(--primary-gold);
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin-bottom: 30px;
-        }
-
-        .cta-button {
-            padding: 15px 40px;
-            background-color: var(--primary-gold);
-            color: var(--primary-blue);
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 50px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            background-color: var(--accent-gold);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
-        }
-
-        /* SECTIONS */
-        .section {
-            padding: 80px 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section h2 {
-            font-size: 2.5rem;
-            color: var(--primary-blue);
-            margin-bottom: 30px;
-            text-align: center;
-            position: relative;
-        }
-
-        .section h2::after {
-            content: '';
+        .view-section.active {
             display: block;
-            width: 60px;
-            height: 4px;
-            background-color: var(--primary-gold);
-            margin: 10px auto;
         }
 
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: center;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .about-text p {
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-
-        .about-img img {
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 4px solid var(--primary-gold);
-        }
-
-        /* CARDS */
-        .info-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
-        }
-
+        /* --- COMPONENTES VISUAIS --- */
+        
+        /* Cards */
         .card {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-            border-top: 4px solid var(--primary-blue);
+            background: var(--surface-white);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-icon {
-            font-size: 2rem;
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
-            color: var(--primary-gold);
         }
 
-        /* FOOTER */
-        footer {
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-new { background: #E0F2FE; color: #0369A1; }
+        .badge-event { background: #FEF3C7; color: #92400E; }
+
+        /* Botões */
+        .btn-action {
+            width: 100%;
+            padding: 12px;
             background-color: var(--primary-blue);
             color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+        .btn-action:active { transform: scale(0.98); }
+        .btn-gold { background-color: var(--primary-gold); color: var(--primary-blue); }
+
+        /* --- FEED (HOME) --- */
+        .feed-post img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            height: 180px;
+            object-fit: cover;
+            background-color: #eee;
+        }
+
+        /* --- AGENDA --- */
+        .event-date {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .date-box {
+            background: var(--primary-blue);
+            color: var(--primary-gold);
+            padding: 10px;
+            border-radius: 10px;
             text-align: center;
-            padding: 40px 20px;
-            margin-top: 50px;
+            min-width: 60px;
+        }
+        .date-box span { display: block; font-weight: 800; font-size: 1.2rem; }
+        .date-box small { font-size: 0.7rem; text-transform: uppercase; }
+
+        /* --- TRAJETO (MAPA) --- */
+        .map-placeholder {
+            background-color: #e5e7eb;
+            height: 300px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-grey);
+            font-weight: 600;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Simulando um mapa simples com CSS */
+        .map-placeholder::before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 80%;
+            background: var(--primary-blue);
+            transform: rotate(15deg);
+        }
+        .map-pin {
+            position: absolute;
+            font-size: 2rem;
+            color: var(--primary-blue);
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
         }
 
-        footer p {
-            opacity: 0.8;
-            font-size: 0.9rem;
+        /* --- PERFIL --- */
+        .profile-header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            background: #ddd;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 4px solid var(--primary-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #666;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+        .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--primary-blue); }
+        .stat-label { font-size: 0.8rem; color: var(--text-grey); }
+
+        /* --- BOTTOM NAVIGATION --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background: var(--surface-white);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+            border-top: 1px solid #eee;
         }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .about-grid { grid-template-columns: 1fr; }
-            nav { display: none; } /* Simplificação para mobile */
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-grey);
+            text-decoration: none;
+            font-size: 0.7rem;
+            gap: 4px;
+            flex: 1;
+            height: 100%;
+            transition: color 0.2s;
+            cursor: pointer;
         }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .nav-item.active {
+            color: var(--primary-blue);
+        }
+        
+        /* Destaque para o botão central (Repertório) */
+        .nav-item-highlight {
+            position: relative;
+            top: -15px;
+        }
+        .nav-circle {
+            background: var(--primary-gold);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
+            border: 4px solid var(--bg-light);
+        }
+        .nav-item-highlight svg {
+            stroke: var(--primary-blue);
+            fill: none;
+        }
+        .nav-item-highlight span {
+            margin-top: 5px;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="#" class="logo">Sueltos SP</a>
-        <nav>
-            <ul>
-                <li><a href="#grupo">O Grupo</a></li>
-                <li><a href="#bloco">O Bloco</a></li>
-                <li><a href="#contato">Contato</a></li>
-            </ul>
-        </nav>
+    <!-- CABEÇALHO -->
+    <header class="app-header">
+        <div class="header-logo">SUELTOS APP</div>
+        <div class="user-avatar">S</div>
     </header>
 
-    <!-- HERO / CAPA -->
-    <section class="hero">
-        <h1>SUELTOS EM SP</h1>
-        <p>Música, alegria e a energia do carnaval o ano todo.</p>
-        <br>
-        <a href="repertorio.html" class="cta-button">🎵 Abrir Repertório Digital</a>
-    </section>
+    <!-- CONTEÚDO PRINCIPAL (Muda conforme abas) -->
+    <main id="app-content">
+        
+        <!-- ABA 1: FEED / HOME -->
+        <section id="tab-home" class="view-section active">
+            <!-- Aviso Importante -->
+            <div class="card" style="background: linear-gradient(135deg, var(--primary-blue), #001133); color: white;">
+                <div class="card-header">
+                    <span class="card-title" style="color: var(--primary-gold);">Próximo Ensaio</span>
+                    <span class="badge badge-event">Agenda</span>
+                </div>
+                <h2 style="font-size: 1.5rem; margin-bottom: 5px;">Sábado, 14h</h2>
+                <p style="opacity: 0.9;">Praça da Matriz - Bateria completa!</p>
+                <div style="margin-top: 15px;">
+                    <button class="btn-action btn-gold" onclick="switchTab('agenda')">Ver Detalhes</button>
+                </div>
+            </div>
 
-    <!-- O GRUPO -->
-    <section id="grupo" class="section">
-        <div class="about-grid">
-            <div class="about-text">
-                <h2>O Grupo</h2>
-                <p>Nascido da paixão pela música brasileira e latina, o <strong>Sueltos em SP</strong> traz uma proposta única de fusão rítmica. Somos um coletivo de artistas dedicados a espalhar a boa música pelos cantos da cidade.</p>
-                <p>Nossa identidade visual, marcada pelo azul profundo e o dourado, reflete a nobreza da nossa música e a vibração dos nossos integrantes.</p>
+            <h3 style="margin: 20px 0 10px; color: var(--text-grey); font-size: 0.9rem; text-transform: uppercase;">Mural da Comunidade</h3>
+
+            <!-- Post 1 -->
+            <div class="card feed-post">
+                <div class="card-header">
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <div class="user-avatar" style="width:30px; height:30px; font-size:0.8rem;">A</div>
+                        <span style="font-weight:600; font-size:0.9rem;">Admin</span>
+                    </div>
+                    <span style="font-size:0.8rem; color:#888;">2h atrás</span>
+                </div>
+                <img src="image_d0e8af.jpg" alt="Foto do Bloco" onerror="this.src='https://via.placeholder.com/400x200?text=Foto+do+Ensaio'">
+                <p>Galera, as camisetas novas chegaram! Estarão disponíveis no próximo ensaio. Quem reservou, favor procurar a produção.</p>
+                <div style="margin-top: 15px; display:flex; gap:15px; color:var(--text-grey);">
+                    <span>❤️ 12 curtidas</span>
+                    <span>💬 3 comentários</span>
+                </div>
             </div>
-            <div class="about-img">
-                <!-- Placeholder para foto do grupo -->
-                <img src="image_d0e8af.jpg" alt="Estandarte Sueltos">
+
+            <!-- Post 2 -->
+            <div class="card feed-post">
+                <div class="card-header">
+                    <span class="card-title">Enquete do Repertório</span>
+                    <span class="badge badge-new">Votação</span>
+                </div>
+                <p>Qual marchinha não pode faltar esse ano? A votação está aberta no grupo do WhatsApp!</p>
             </div>
+        </section>
+
+        <!-- ABA 2: AGENDA -->
+        <section id="tab-agenda" class="view-section">
+            <h2 style="margin-bottom: 20px; color: var(--primary-blue);">Calendário 2026</h2>
+            
+            <!-- Evento 1 -->
+            <div class="card">
+                <div class="event-date">
+                    <div class="date-box">
+                        <span>15</span>
+                        <small>FEV</small>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 1.1rem; color: var(--primary-blue);">Ensaio Geral</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-grey);">14:00 - 18:00 • Praça Roosevelt</p>
+                    </div>
+                </div>
+                <button class="btn-action" style="background: #E0F2FE; color: var(--primary-blue);">Confirmar Presença</button>
+            </div>
+
+            <!-- Evento 2 -->
+            <div class="card">
+                <div class="event-date">
+                    <div class="date-box" style="background: var(--primary-gold); color: var(--primary-blue);">
+                        <span>28</span>
+                        <small>FEV</small>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 1.1rem; color: var(--primary-blue);">Desfile Oficial</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-grey);">12:00 - Concentração • Centro</p>
+                    </div>
+                </div>
+                <button class="btn-action">Vou com certeza!</button>
+            </div>
+        </section>
+
+        <!-- ABA 3: TRAJETO (Mapa) -->
+        <section id="tab-trajeto" class="view-section">
+            <h2 style="margin-bottom: 20px; color: var(--primary-blue);">Rota do Bloco</h2>
+            
+            <div class="card">
+                <p style="margin-bottom: 15px;">Este é o trajeto aprovado pela prefeitura para 2026. Clique nos pontos para ver detalhes.</p>
+                
+                <div class="map-placeholder">
+                    <div style="z-index: 2; text-align:center;">
+                        <span style="font-size:3rem; display:block;">🗺️</span>
+                        Mapa Interativo<br><small>(Em breve integração GPS)</small>
+                    </div>
+                    <div class="map-pin" style="top: 30%; left: 40%;">📍</div>
+                    <div class="map-pin" style="top: 60%; left: 60%;">🏁</div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; font-size:0.9rem; border-top:1px solid #eee; padding-top:15px;">
+                    <div><strong>Distância:</strong> 2.5km</div>
+                    <div><strong>Tempo:</strong> 3h</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 4: PERFIL -->
+        <section id="tab-perfil" class="view-section">
+            <div class="profile-header">
+                <div class="profile-img">👤</div>
+                <h2 style="color: var(--primary-blue);">Membro Suelto</h2>
+                <span class="badge badge-new" style="background: var(--primary-gold); color: white;">Instrumentista</span>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Minhas Estatísticas</h3>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Ensaios</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Presença</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Configurações</h3>
+                <ul style="list-style: none; margin-top: 10px;">
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee; display:flex; justify-content:space-between;">
+                        <span>🔔 Notificações</span>
+                        <span style="color: var(--success-green);">Ativado</span>
+                    </li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                        <span>👕 Tamanho da Camiseta: <strong>M</strong></span>
+                    </li>
+                    <li style="padding: 10px 0; color: red;">
+                        Sair do App
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('home')">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <span>Feed</span>
         </div>
-    </section>
-
-    <!-- O BLOCO -->
-    <section id="bloco" class="section" style="background-color: white;">
-        <h2>Bloco dos Sueltos</h2>
-        <p style="text-align: center; max-width: 700px; margin: 0 auto 40px auto;">
-            O nosso carnaval é sagrado! O Bloco dos Sueltos arrasta multidões com um repertório autoral e releituras clássicas.
-        </p>
-
-        <div class="info-cards">
-            <div class="card">
-                <div class="card-icon">📍</div>
-                <h3>Local</h3>
-                <p>São Paulo - SP</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">🎉</div>
-                <h3>Estilo</h3>
-                <p>Marchinha, Samba e Ritmos Latinos</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">📅</div>
-                <h3>Agenda</h3>
-                <p>Fique ligado nas nossas redes sociais</p>
-            </div>
+        
+        <div class="nav-item" onclick="switchTab('agenda')">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span>Agenda</span>
         </div>
-    </section>
 
-    <!-- REPERTÓRIO CHAMADA -->
-    <section class="section" style="text-align: center; background-color: var(--primary-blue); color: white;">
-        <h2 style="color: var(--primary-gold);">Aprenda Nossas Músicas</h2>
-        <p style="margin-bottom: 30px;">Disponibilizamos letras e cifras completas para você tocar com a gente.</p>
-        <a href="repertorio.html" class="cta-button" style="background: white; color: var(--primary-blue);">Acessar Cifras e Letras</a>
-    </section>
+        <!-- BOTÃO DESTAQUE REPERTÓRIO (Abre o outro arquivo) -->
+        <a href="repertorio.html" class="nav-item nav-item-highlight">
+            <div class="nav-circle">
+                <svg viewBox="0 0 24 24" style="width: 28px; height: 28px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+            </div>
+            <span style="font-size: 0.75rem;">Músicas</span>
+        </a>
 
-    <footer id="contato">
-        <h3>Sueltos em SP</h3>
-        <p>Siga-nos nas redes sociais</p>
-        <br>
-        <p>&copy; 2026 Sueltos em SP. Todos os direitos reservados.</p>
-    </footer>
+        <div class="nav-item" onclick="switchTab('trajeto')">
+            <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+            <span>Trajeto</span>
+        </div>
+
+        <div class="nav-item" onclick="switchTab('perfil')">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Perfil</span>
+        </div>
+    </nav>
+
+    <script>
+        function switchTab(tabId) {
+            // Remove active de todas as views
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Adiciona active na view selecionada
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            // Atualiza ícones da nav
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Lógica simples para ativar o ícone correto
+            // (Nota: o botão do meio é um link <a>, não entra nessa lógica visual de troca de aba interna)
+            const navIndex = {
+                'home': 0,
+                'agenda': 1,
+                'trajeto': 3, // Pula o índice 2 que é o botão central
+                'perfil': 4
+            };
+            
+            if (navIndex[tabId] !== undefined) {
+                document.querySelectorAll('.nav-item')[navIndex[tabId]].classList.add('active');
+            }
+
+            // Scroll pro topo ao mudar de aba
+            document.getElementById('app-content').scrollTop = 0;
+        }
+    </script>
 
 </body>
 </html>
