@@ -59,6 +59,16 @@
             text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
         }
 
+        .home-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+        .home-link:hover { opacity: 1; text-decoration: underline; }
+
         .search-box input {
             width: 100%;
             padding: 10px 15px;
@@ -430,6 +440,7 @@
     <!-- SIDEBAR -->
     <aside id="sidebar">
         <div class="sidebar-header">
+            <a href="index.html" class="home-link">← Voltar para o Site</a>
             <h1>Bloco dos Sueltos</h1>
             <div class="search-box">
                 <input type="text" id="search-input" placeholder="🔍 Buscar música...">
