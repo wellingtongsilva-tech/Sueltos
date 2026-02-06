@@ -6,12 +6,11 @@
     <title>Repertório Bloco Sueltos</title>
     <style>
         :root {
-            /* Paleta de Cores Baseada no Estandarte */
-            --primary-blue: #002266; /* Azul profundo oficial */
-            --primary-gold: #D4AF37; /* Dourado Metálico */
-            --bright-gold: #FFD700; /* Dourado Brilhante para destaques */
+            --primary-blue: #002266;
+            --primary-gold: #D4AF37;
+            --bright-gold: #FFD700;
             --bg-color: #f0f2f5;
-            --sidebar-width: 350px;
+            --sidebar-width: 320px;
         }
 
         * {
@@ -23,7 +22,7 @@
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
-            /* Ajuste para altura correta em celulares modernos */
+            /* Importante: Define a altura total como a tela cheia e impede rolagem dupla */
             height: 100vh;
             height: 100dvh; 
             display: flex;
@@ -37,26 +36,27 @@
             border-right: 1px solid #ddd;
             display: flex;
             flex-direction: column;
-            z-index: 10;
+            z-index: 20; /* Sidebar acima do conteúdo */
             box-shadow: 2px 0 5px rgba(0,0,0,0.05);
             transition: transform 0.3s ease;
+            height: 100%;
         }
 
         .sidebar-header {
             background-color: var(--primary-blue);
-            padding: 20px;
+            padding: 15px;
             color: var(--primary-gold);
             text-align: center;
             border-bottom: 4px solid var(--primary-gold);
+            flex-shrink: 0;
         }
 
         .sidebar-header h1 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
             color: var(--bright-gold);
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
         }
 
         .home-link {
@@ -64,24 +64,78 @@
             text-decoration: none;
             font-size: 0.8rem;
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             opacity: 0.8;
         }
         .home-link:hover { opacity: 1; text-decoration: underline; }
 
         .search-box input {
             width: 100%;
-            padding: 10px 15px;
+            padding: 8px 15px;
             border-radius: 20px;
             border: 2px solid var(--primary-gold);
             outline: none;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
-        .song-list {
+        /* ÁREA DE MENUS (Accordion) */
+        .menu-container {
             flex: 1;
-            overflow-y: auto;
+            overflow-y: auto; /* Rolagem interna do menu */
             padding: 10px 0;
+        }
+
+        .menu-section {
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-title {
+            padding: 15px 20px;
+            font-weight: bold;
+            color: var(--primary-blue);
+            background: #f8f9fa;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .menu-title:hover {
+            background: #eef2f6;
+        }
+
+        .menu-content {
+            display: none;
+            background: white;
+        }
+
+        .menu-content.open {
+            display: block;
+        }
+
+        .song-item {
+            padding: 12px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #444;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .song-item:hover {
+            background-color: #fff9e6;
+            color: var(--primary-blue);
+        }
+
+        .song-item.active {
+            background-color: rgba(0, 34, 102, 0.1);
+            border-left: 4px solid var(--primary-blue);
+            font-weight: bold;
         }
 
         .sidebar-footer {
@@ -89,88 +143,37 @@
             border-top: 1px solid #ddd;
             background-color: #f8f9fa;
             text-align: center;
+            flex-shrink: 0;
         }
 
-        .doc-link-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background-color: white;
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9rem;
-            padding: 10px 16px;
-            border: 2px solid var(--primary-blue);
-            border-radius: 20px;
-            transition: all 0.2s;
-            width: 100%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .doc-link-btn:hover {
-            background-color: var(--primary-blue);
-            color: var(--bright-gold);
-            border-color: var(--bright-gold);
-        }
-
-        .song-item {
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .song-item:hover {
-            background-color: #fff9e6; /* Amarelo bem claro */
-        }
-
-        .song-item.active {
-            background-color: rgba(0, 34, 102, 0.1); /* Azul claro */
-            border-left: 4px solid var(--primary-blue);
-        }
-
-        .song-item h3 {
-            font-size: 1rem;
-            color: var(--primary-blue);
-            margin-bottom: 4px;
-        }
-
-        .song-item p {
-            font-size: 0.8rem;
-            color: #666;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 250px;
-        }
-
-        /* --- ÁREA PRINCIPAL --- */
+        /* --- ÁREA PRINCIPAL (SCROLL CORRIGIDO) --- */
         main {
             flex: 1;
+            display: block; /* Mudado de flex para block para melhor controle de scroll */
+            background-color: #e6e9ef;
+            overflow-y: auto; /* A rolagem acontece aqui */
+            position: relative;
+            -webkit-overflow-scrolling: touch; /* Rolagem suave no iOS */
+            height: 100%;
+            padding: 0;
+        }
+
+        /* Wrapper interno para centralizar e dar padding */
+        .main-content-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 150px; /* Espaço extra no final para não cortar */
+            min-height: 100%; /* Garante que o container ocupe pelo menos a altura da tela */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; 
-            padding: 20px;
-            /* Aumentado o padding inferior para garantir scroll completo */
-            padding-bottom: 120px; 
-            background-color: #e6e9ef;
-            overflow-y: auto;
-            position: relative;
-            /* Melhora rolagem no iOS */
-            -webkit-overflow-scrolling: touch; 
         }
 
-        /* Container Principal (Folha Branca) */
         .estandarte-container {
             background-color: #fff;
             width: 100%;
-            max-width: 800px;
+            /* Height auto é CRUCIAL para o container crescer com o texto */
             height: auto; 
             min-height: 80vh; 
             border-radius: 15px;
@@ -179,24 +182,22 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            /* Margem extra para garantir que não corte no final */
-            margin-bottom: 60px;
+            overflow: hidden; /* Mantém a marca d'água dentro das bordas arredondadas */
         }
 
-        /* Marca D'água */
+        /* Marca D'água Ajustada */
         .estandarte-container::before {
             content: "";
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            height: 90%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%; /* Cobre 100% da altura total do container (que cresceu com o texto) */
             background-image: url('image_d0e8af.jpg');
             background-repeat: no-repeat;
             background-position: center;
-            background-size: contain;
-            opacity: 0.15;
+            background-size: cover; 
+            opacity: 0.12;
             pointer-events: none;
             z-index: 0;
         }
@@ -208,7 +209,6 @@
             border: 2px solid var(--primary-gold);
         }
 
-        /* MOLDURA NO HEADER */
         .content-header {
             display: flex;
             justify-content: space-between;
@@ -235,17 +235,17 @@
 
         .header-icons {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
             padding-top: 5px;
+            flex-wrap: wrap;
         }
 
         /* Controles de Tom */
         .tone-controls {
-            display: none; /* Escondido por padrão, aparece via JS */
+            display: flex;
             align-items: center;
             gap: 5px;
-            margin-right: 10px;
             background-color: #f0f2f5;
             padding: 4px 10px;
             border-radius: 20px;
@@ -267,11 +267,6 @@
             justify-content: center;
         }
 
-        .tone-btn:hover {
-            background: var(--primary-gold);
-            color: var(--primary-blue);
-        }
-
         .tone-display {
             font-size: 0.9rem;
             color: #333;
@@ -282,24 +277,36 @@
 
         .song-title-display {
             color: var(--primary-blue);
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             text-transform: uppercase;
             font-weight: 800;
             line-height: 1.1;
         }
 
         .composers {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #666;
             font-style: italic;
             margin-top: 5px;
             display: block;
         }
 
+        .category-badge {
+            display: inline-block;
+            background: var(--primary-gold);
+            color: var(--primary-blue);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
         .lyrics-display {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             line-height: 1.8;
-            white-space: pre-wrap;
+            white-space: pre-wrap; /* Mantém quebras de linha */
             color: #333;
             flex-grow: 1;
             font-family: 'Georgia', serif;
@@ -310,23 +317,20 @@
 
         /* Estilo das Cifras */
         .chord {
-            color: #B8860B; /* Dark Goldenrod */
+            color: #B8860B;
             font-weight: 700;
             font-family: 'Courier New', monospace;
-            font-size: 0.9em;
+            font-size: 0.95em;
             background: rgba(255, 215, 0, 0.25);
             padding: 2px 6px;
             border-radius: 4px;
             display: inline-block;
-            margin-right: 4px;
+            margin-right: 2px;
             cursor: pointer;
         }
 
-        .chord:hover {
-            background: rgba(255, 215, 0, 0.5);
-        }
+        .chord:hover { background: rgba(255, 215, 0, 0.5); }
 
-        /* Bloco de Intro/Cifra Destacado */
         .chord-block {
             background: rgba(248, 249, 250, 0.9);
             border-left: 4px solid var(--primary-gold);
@@ -337,17 +341,70 @@
             font-size: 0.9em;
         }
 
-        /* Ícones SVG */
-        .icon-link svg {
-            width: 32px;
-            height: 32px;
-            transition: transform 0.2s;
+        /* Estilos para Players Embedados (Audio e Video) */
+        .media-player-container {
+            margin-bottom: 20px;
+            width: 100%;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-blue);
+            position: relative;
+            z-index: 5;
         }
-        .icon-link:hover svg {
-            transform: scale(1.15);
+        
+        .media-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            display: block;
         }
-        .yt-icon path { fill: #FF0000; }
-        .sp-icon path { fill: #1DB954; }
+
+        /* Iframe para Áudio (Estilizado para ser compacto) */
+        .audio-iframe {
+            width: 100%;
+            height: 100px; /* Altura compacta para parecer um player */
+            border: 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Botões de Drive */
+        .drive-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #eee;
+            color: #333;
+            padding: 6px 12px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: background 0.2s;
+            border: 1px solid #ccc;
+        }
+        .drive-btn:hover { background-color: #ddd; }
 
         /* Empty State */
         .empty-state {
@@ -362,16 +419,11 @@
             flex-grow: 1;
             z-index: 2;
         }
-        
         .big-logo {
-            width: 100%;
-            max-width: 350px;
-            height: auto;
+            width: 100%; max-width: 300px; height: auto;
             border: 4px solid var(--primary-gold);
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            background-color: white; /* Para destacar sobre a marca d'água */
+            border-radius: 10px; margin-bottom: 30px;
+            background-color: white;
         }
 
         /* Mobile */
@@ -379,59 +431,26 @@
 
         @media (max-width: 768px) {
             aside {
-                position: absolute;
-                width: 100%;
-                height: 100%;
+                position: absolute; width: 100%; height: 100%;
                 transform: translateX(0);
             }
             aside.hidden { transform: translateX(-100%); }
             
-            main { padding: 10px; padding-bottom: 120px; } 
+            /* Ajuste de padding para mobile */
+            .main-content-wrapper { padding: 15px; padding-bottom: 150px; }
             
-            .estandarte-container {
-                padding: 20px;
-                margin-bottom: 80px; 
-            }
+            .estandarte-container { padding: 25px; }
 
             .back-btn {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-                background: none;
-                border: none;
-                color: var(--primary-blue);
-                font-size: 1.1rem;
-                font-weight: bold;
-                padding: 10px;
-                margin-bottom: 5px;
+                display: flex; align-items: center; gap: 5px;
+                background: none; border: none;
+                color: var(--primary-blue); font-size: 1.1rem;
+                font-weight: bold; padding: 10px 0; margin-bottom: 5px;
                 cursor: pointer;
             }
             
-            .content-header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                padding: 15px;
-            }
-
-            .header-left {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .header-icons {
-                margin-top: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            /* Ajuste para controles de tom no mobile */
-            .tone-controls {
-                margin-right: 0;
-                margin-bottom: 10px;
-                width: 100%;
-                justify-content: center;
-            }
+            .content-header { flex-direction: column; align-items: center; text-align: center; }
+            .header-icons { justify-content: center; margin-top: 15px; }
         }
     </style>
 </head>
@@ -441,409 +460,212 @@
     <aside id="sidebar">
         <div class="sidebar-header">
             <a href="index.html" class="home-link">← Voltar para o Site</a>
-            <h1>Bloco dos Sueltos</h1>
+            <h1>Repertório Sueltos</h1>
             <div class="search-box">
                 <input type="text" id="search-input" placeholder="🔍 Buscar música...">
             </div>
         </div>
         
-        <div id="song-list" class="song-list">
-            <!-- Lista via JS -->
+        <!-- MENU SANFONA -->
+        <div class="menu-container">
+            
+            <!-- Menu Letras -->
+            <div class="menu-section">
+                <div class="menu-title" onclick="toggleMenu('lyrics-menu')">
+                    Letras <span>▼</span>
+                </div>
+                <div id="lyrics-menu" class="menu-content open">
+                    <!-- Lista injetada via JS -->
+                </div>
+            </div>
+
+            <!-- Menu Cifras -->
+            <div class="menu-section">
+                <div class="menu-title" onclick="toggleMenu('chords-menu')">
+                    Cifras <span>▼</span>
+                </div>
+                <div id="chords-menu" class="menu-content">
+                    <!-- Lista injetada via JS -->
+                </div>
+            </div>
+
+            <!-- Menu Vídeos -->
+            <div class="menu-section">
+                <div class="menu-title" onclick="toggleMenu('videos-menu')">
+                    Vídeos <span>▼</span>
+                </div>
+                <div id="videos-menu" class="menu-content">
+                    <!-- Lista injetada via JS -->
+                </div>
+            </div>
+
         </div>
         
         <div class="sidebar-footer">
-            <a href="https://docs.google.com/document/d/1IIGcVj8fMWmGa-K8nSwE9YRdUvn4zT_2/edit" target="_blank" class="doc-link-btn">
-                📄 Ver no Google Docs
+            <a href="https://drive.google.com/drive/folders/1KHDCieFuZStbmVVYGWQLDAlRpAcKFRy5" target="_blank" class="drive-btn" style="width: 100%; justify-content: center;">
+                📂 Pasta de Áudios (Geral)
             </a>
         </div>
     </aside>
 
     <!-- MAIN CONTENT -->
     <main id="main-content">
-        <div style="width: 100%; max-width: 800px;">
-            <button id="back-btn" class="back-btn" onclick="showSidebar()">
-                ← Voltar
-            </button>
-        </div>
+        <div class="main-content-wrapper">
+            <div style="width: 100%; max-width: 800px;">
+                <button id="back-btn" class="back-btn" onclick="showSidebar()">
+                    ← Voltar
+                </button>
+            </div>
 
-        <div class="estandarte-container">
-            <div id="content-display">
-                <!-- Estado Inicial -->
-                <div class="empty-state">
-                    <img src="image_d0e8af.jpg" alt="Estandarte Bloco Sueltos" class="big-logo" onerror="this.src='https://via.placeholder.com/300x400/002266/FFD700?text=BLOCO+SUELTOS'">
-                    <h2>Repertório Oficial</h2>
-                    <p style="margin-top: 15px; max-width: 400px; color: #555;">
-                        Selecione uma música no menu lateral para visualizar a letra e as cifras.
-                    </p>
+            <div class="estandarte-container">
+                <div id="content-display">
+                    <!-- Estado Inicial -->
+                    <div class="empty-state">
+                        <img src="image_d0e8af.jpg" alt="Estandarte Bloco Sueltos" class="big-logo" onerror="this.src='https://via.placeholder.com/300x400/002266/FFD700?text=BLOCO+SUELTOS'">
+                        <h2>Selecione uma opção</h2>
+                        <p style="margin-top: 15px; color: #555;">
+                            Navegue pelos menus de <strong>Letras</strong>, <strong>Cifras</strong> ou <strong>Vídeos</strong> à esquerda.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
+        // --- LINKS GERAIS DO DRIVE ---
+        const AUDIO_FOLDER = "https://drive.google.com/drive/folders/1KHDCieFuZStbmVVYGWQLDAlRpAcKFRy5";
+        const VIDEO_FOLDER = "https://drive.google.com/drive/folders/1uD1BBkYUZc9RPLKMdqznPNHhmrIY_Nne";
+
         // --- UTILITÁRIOS DE CIFRA ---
         const chromaticScale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         const flatToSharp = { "Db": "C#", "Eb": "D#", "Gb": "F#", "Ab": "G#", "Bb": "A#" };
 
         function transposeChord(chord, semitones) {
-            // Regex para separar nota base, acidente e sufixo
-            // Ex: Cm7 -> C, m7 | F#m -> F#, m | A(b9) -> A, (b9) | Bb -> Bb, ""
-            
-            // Tratamento para acordes com baixo invertido (Ex: D/F#)
-            if (chord.includes('/')) {
-                return chord.split('/').map(part => transposeChord(part, semitones)).join('/');
-            }
-
-            // Encontrar a nota tônica
+            if (chord.includes('/')) return chord.split('/').map(part => transposeChord(part, semitones)).join('/');
             let rootMatch = chord.match(/^([A-G][b#]?)/);
             if (!rootMatch) return chord;
-            
             let root = rootMatch[1];
             let suffix = chord.substring(root.length);
-
-            // Normalizar bemóis para sustenidos para facilitar o cálculo
             if (flatToSharp[root]) root = flatToSharp[root];
-
-            // Encontrar índice
             let index = chromaticScale.indexOf(root);
-            if (index === -1) return chord; // Se não achar, retorna original
-
-            // Calcular novo índice (com loop circular)
+            if (index === -1) return chord;
             let newIndex = (index + semitones) % 12;
             if (newIndex < 0) newIndex += 12;
-
             return chromaticScale[newIndex] + suffix;
         }
 
-        // Variável de estado global para o tom
         let currentTransposition = 0;
 
-        // --- DADOS DO REPERTÓRIO ---
-        const songs = [
-            // --- BLOCO 1: LETRAS ---
+        // --- BASE DE DADOS COMPLETA ---
+        const repertoire = [
             {
                 id: 1,
-                title: "Bloco do Balacobaco",
-                author: "Marco Rio Branco",
-                content: `Ninguém é de ninguém
-Mas todo mundo é de todo mundo no carnaval eh
-Ninguém é de ninguém
-Mas todo mundo é de todo mundo no carnaval
-
-é do Balacobaco, baco, baco, baco
-baco, baco, baco, baco
-baco, baco, do balaco baco
-
-é do Balacobaco, baco, baco, baco
-baco, baco, baco, baco
-baco, baco, do balaco baco`,
-                links: { youtube: "https://www.youtube.com/watch?v=-HcYPaxUZ0M" }
+                title: "Marchinha dos Sueltos",
+                author: "Fábio Barros / Daniel Conti / Mari Della Vecchia / Marco Vilane",
+                lyrics: `Eu tô soltinho, eu não me amarro\neu tô com fogo no rabo\neu tô soltinho, eu não me amarro\neu tô com fogo no rabo\n\nPode chover canivete\npode o mundo acabar\nque esse fogo no rabo\nnunca irá se apagar\nque esse fogo no rabo\nnunca irá se apagar\n\nSueltos em São Paulo\npuberdade senil\nmadrugada adentro\ntudo acaba no Geni\nnão monogamia\né não monotonia (cadê gato mia?)\no rebuceteio\né melhor que Netflix!\né melhor que Netflix!`,
+                chords: `<span class="chord">Bm7</span>\nEu tô soltinho, eu não me amarro\n<span class="chord">C#m7(b5)</span> <span class="chord">F#7</span> <span class="chord">Bm7</span>\neu tô com fogo no rabo\n(2x)\n\n<span class="chord">Em7</span> <span class="chord">A7</span>\nPode chover canivete\n<span class="chord">C#m7(b5)</span> <span class="chord">F#7</span> <span class="chord">Bm7</span>\npode o mundo acabar\n<span class="chord">G7</span> <span class="chord">F#7</span>\nque esse fogo no rabo\n<span class="chord">C#m7(b5)</span> <span class="chord">F#7</span> <span class="chord">Bm7</span>\nnunca irá se apagar\n<span class="chord">G7</span> <span class="chord">F#7</span>\nque esse fogo no rabo\n<span class="chord">C#m7(b5)</span> <span class="chord">F#7</span> <span class="chord">Bm7</span>\nnunca irá se apagar\n\n(vira marcha-rancho)\n<span class="chord">Bm7</span> <span class="chord">A7</span>\nSueltos em São Paulo\n<span class="chord">G7</span> <span class="chord">F#7</span> <span class="chord">B7</span>\npuberdade senil\n<span class="chord">Em7</span> <span class="chord">Bm7</span>\nmadrugada adentro\n<span class="chord">C#m7(b5)</span> <span class="chord">F#7</span> <span class="chord">Bm7</span> <span class="chord">B7</span>\ntudo acaba no Geni\n<span class="chord">Em7</span> <span class="chord">A7</span>\nNão monogamia\n<span class="chord">G7</span> <span class="chord">F#7</span>\né não monotonia (cadê gato mia?)\n<span class="chord">Em7</span> <span class="chord">Bm7</span>\no rebuceteio\n<span class="chord">C#m7(b5)</span> <span class="chord">F#7</span> <span class="chord">Bm7</span>\né melhor que Netflix!\n<span class="chord">C#m7(b5)</span> <span class="chord">F#7</span> <span class="chord">Bm7</span>\né melhor que Netflix!`,
+                audios: [
+                    { title: "Áudio Oficial", id: "12UVYG4IgRuGc9PJgLbLyQ6_XrlzKzP1v" } 
+                ],
+                videos: [
+                    { title: "Marchinha 1", id: "1TQIWkVTNWkDtpG_axGLKlw9FqE-NL1Y2", type: "drive" },
+                    { title: "Marchinha 2", id: "1iGm91bkYTxn1PG_rle3-LOn4ALV-ptrG", type: "drive" }
+                ]
             },
             {
                 id: 2,
-                title: "Separado",
-                author: "Demetrius Lulo / Edu Capello / Thiago K",
-                content: `O Chimbinha e a Joelma separaram
-Separaram, separaram
-
-A Fátima e o Bonner separaram
-Separaram, separaram
-
-A Sandy e o Junior separaram
-Separaram, separaram
-
-Neymar e Marquezine separaram
-Mas voltaram e separaram
-
-Fábio Júnior e a Glória
-Tereza, Cristina, Patrícia, Guilhermina,
-Maria e Maria separaram
-Separaram, separaram
-
-Todo mundo junto
-Todo mundo junto
-Separado, separado, separado
-
-Todo mundo junto
-Todo mundo junto
-Separado, separado, separado`,
-                links: { youtube: "https://www.youtube.com/watch?v=w5c9KEflWTw" }
+                title: "Duende de Durepox",
+                author: "Mari Della Vecchia / Daniel Conti",
+                lyrics: `Foi no bloco dos sueltos que\nConheci um(a) jovem místico(a)\n\nAyahuasca, MD,\nme amarrei na orgia (menage) holística(o)\n\nEla(e) faz yoga, ela(e) canta mantra\nCiranda de roda, carnaval em Piracanga\n(2x)\n\nO cirandeiro, cirandeiro, ó\na pedra do seu anel brilha mais do que o sol\n\nO cirandeiro, cirandeiro, ó\na pedra do seu anel brilha mais do que o sol\n\nZimbabaue, gratiluz haribô, namastê!\nEla(e) é do tantra, shot de carvão detox\nSaia indiana, duende de durepox\n(2x)`,
+                chords: `<span class="chord">Am</span> <span class="chord">Bb</span>\nFoi no bloco dos sueltos que\n<span class="chord">C</span> <span class="chord">Bb</span> <span class="chord">Am</span>\nConheci um(a) jovem místico(a)\n\n<span class="chord">Am</span> <span class="chord">Bb</span>\nAyahuasca, MD,\n<span class="chord">C</span> <span class="chord">Bb</span> <span class="chord">Am</span>\nme amarrei na orgia (menage) holística(o)\n\n<span class="chord">Dm</span> <span class="chord">C</span>\nEla(e) faz yoga, ela(e) canta mantra\n<span class="chord">Bb</span> <span class="chord">A(b9)</span> (<span class="chord">Am</span>)\nCiranda de roda, carnaval em Piracanga\n(2x)\n\n<span class="chord">Am</span>\nO cirandeiro, cirandeiro, ó\n<span class="chord">Dm</span> <span class="chord">E7</span> <span class="chord">Am</span>\na pedra do seu anel brilha mais do que o sol\n\n<span class="chord">Am</span>\nO cirandeiro, cirandeiro, ó\n<span class="chord">Dm</span> <span class="chord">E7</span> <span class="chord">A(b9)</span>\na pedra do seu anel brilha mais do que o sol\n\n<span class="chord">A(b9)</span>\nZimbabaue, gratiluz haribô, namastê!\n<span class="chord">Bb</span> <span class="chord">A(b9)</span>\nEla(e) é do tantra, shot de carvão detox\n<span class="chord">Bb</span> <span class="chord">A(b9)</span>\nSaia indiana, duende de durepox\n(2x)`,
+                audios: [
+                    { title: "Áudio Oficial", id: "1tZhe3KIGXW0zJIEjijXscFtcESbYTIjf" }
+                ],
+                videos: [
+                    { title: "Vídeo Música (Instagram)", url: "https://www.instagram.com/reel/DSNuUXpEfCL/?igsh=MW53em8zaGNka3NsOQ==", type: "link" }
+                ]
             },
             {
                 id: 3,
-                title: "De Graça ou Pagando",
-                author: "Gabriel De Angelo / Pedro Henrique Dos Reis Silva Silva",
-                content: `Ela terminou comigo Falando que eu
-Não ia encontrar ninguém melhor, ô dó
-Ela só se esqueceu que em dois mil e
-Vinte e quatro ninguém fica só
-
-Tem gente demais no mundo
-Pra você se achar a foda
-Pelo amor de deus, se toca
-
-Eu tentei ser seu
-Já que cê não quis
-Então sou das do job agora
-
-Não é só sua pepeca que tem mel
-Não é só sua boca que sabe levar pro céu
-Hoje eu vou sair
-Vou atrás de uns te amo
-De graça ou pagando, ô
-
-Não é só sua pepeca que tem mel
-Não é só sua boca que sabe levar pro céu
-Hoje eu vou sair
-Deixar meu corpo suando
-De graça ou pagando, de graça ou pagando
-
-Óóô, óóô, vou te esquecer
-De graça ou pagando`,
-                links: {
-                    youtube: "https://www.youtube.com/watch?v=LjgdmQvJQ70",
-                    spotify: "https://open.spotify.com/intl-pt/track/6m51sam9gIqRMbJEKW4ADe?si=83722a09f8974657"
-                }
+                title: "Los Luecos Estan Sueltos",
+                author: "Mari Della Vecchia / Daniel Conti",
+                lyrics: `Los Sueltos están luecos\ny los luecos estan sueltos\nlos Sueltos están luecos\ny los luecos estan sueltos\n\nNo comemos ninguien\nNo hacemos amor\nPero nos gustan las druegas,\nEl xeque mate y la cueca cuela\nEl xeque mate y la cueca cuela, ai ai ai ai!`,
+                chords: `<span class="chord">Gm</span>\nLos Sueltos están luecos\n<span class="chord">D7</span> <span class="chord">Gm</span>\ny los luecos estan sueltos\n<span class="chord">Gm</span>\nlos Sueltos están luecos\n<span class="chord">D7</span> <span class="chord">Gm</span>\ny los luecos estan sueltos\n\n<span class="chord">D7</span>\nNo comemos ninguien\n<span class="chord">Gm</span> <span class="chord">D7</span> <span class="chord">Gm</span>\nNo hacemos amor\n<span class="chord">Eb7</span> <span class="chord">D7</span>\nPero nos gustan las druegas,\n<span class="chord">Gm</span> <span class="chord">D7</span>\nEl xeque mate y la cueca cuela\n<span class="chord">Gm</span> <span class="chord">D7</span> <span class="chord">Eb7</span>\nEl xeque mate y la cueca cuela, ai ai ai ai (tudo de novo 1 tom acima)`,
+                audios: [
+                    { title: "Áudio Oficial", id: "1DkSJe77LNDkzzKo69BCcGCXSs00EIU6e" }
+                ],
+                videos: [
+                    { title: "Vídeo Música (Instagram)", url: "https://www.instagram.com/reel/DSNxJgpEUSj/?igsh=cGxnOXhqaHU4eWpl", type: "link" }
+                ]
             },
             {
                 id: 4,
-                title: "Não Sou Obrigada",
-                author: "Pocah",
-                content: `Ah, tá bom, agora quer mandar em mim
-Coitadin', não passa de um contatin'
-Abaixa o tom, respeita a mamãe aqui
-Olha ele todo, todo se achando, 'tá metendo o louco
-Daqui a pouco eu vou fazer que nem eu fiz com o outro
-Se quando eu danço te incomoda, amor, eu acho é pouco
-Ai, que ranço!
-
-Deixa eu te lembrar que eu não sou obrigada a nada
-Ninguém manda nessa raba
-Uma bunda dessa não nasceu pra ser mandada
-Ninguém manda nessa raba
-
-Olha como ele baba
-Oi, baba, baby, nessa raba
-Oi, baba, baby, baba
-Oi, dá um close nessa raba
-Oi, baba, baby, baba
-Oi, baba, baby
-Ninguém manda nessa raba`,
-                links: { youtube: "https://www.youtube.com/watch?v=HutLSVbLWHM" }
+                title: "Sapinho",
+                author: "Demetrius Lulo / Rene Nunes",
+                lyrics: `Beijou um príncipe encantado\nPegou sapo, pegou sapo\nPegou sapo, pegou sapo\n\nAgora o sapo tá soltinho no bloquinho\nSapinho, sapinho\nSapinho, sapinho\n\nPega logo o sapo e aproveita bem a festa\nSolta a perereca, solta a perereca\nSolta a perereca, solta a perereca\n\nla la la la la la la\nla la la la la la la`,
+                chords: `<span class="chord">D</span> <span class="chord">A7</span> <span class="chord">D</span> <span class="chord">B7</span>\nBeijou um príncipe encantado\n<span class="chord">Em</span> <span class="chord">A7</span> <span class="chord">D</span> <span class="chord">B7</span>\nPegou sapo, pegou sapo\n<span class="chord">Em</span> <span class="chord">A7</span> <span class="chord">D</span> <span class="chord">D7</span>\nPegou sapo, pegou sapo\n<span class="chord">G</span> <span class="chord">A7</span> <span class="chord">F#m</span> <span class="chord">B7</span>\nAgora o sapo tá soltinho no bloquinho\n<span class="chord">Em</span> <span class="chord">A7</span> <span class="chord">D</span> <span class="chord">B7</span>\nSapinho, sapinho\n<span class="chord">Em</span> <span class="chord">A7</span> <span class="chord">D</span> <span class="chord">G7</span>\nSapinho, sapinho\n<span class="chord">G</span> <span class="chord">A7</span> <span class="chord">F#m</span>\nPega logo o sapo e aproveita bem a festa\n<span class="chord">B7</span> <span class="chord">Em</span> <span class="chord">A7</span> <span class="chord">D</span>\nSolta a perereca, solta a perereca\n<span class="chord">B7</span> <span class="chord">Em</span> <span class="chord">A7</span> <span class="chord">D</span> <span class="chord">A7</span>\nSolta a perereca, solta a perereca\n\n<span class="chord">D</span> <span class="chord">A7</span> <span class="chord">D</span>\nla la la la la la la\n<span class="chord">D</span> <span class="chord">B7</span> <span class="chord">Em</span>\nla la la la la la la\n<span class="chord">Em</span> <span class="chord">A7</span>\nla la la la la la\n<span class="chord">Em</span> <span class="chord">A7</span>\nla la la la la\n<span class="chord">Em</span> <span class="chord">A7</span> <span class="chord">D</span> <span class="chord">A7</span>\nla    la    la     la     la\n(2x)`,
+                audios: [
+                    { title: "Áudio Oficial", id: "1H9ZoXGU63_-yYIm_o4Fvzxtj1rEUgBhA" }
+                ],
+                videos: [
+                    { title: "Ensaio 1", id: "1QgM2qMjHFhNznjBgL82I0_lEm6WlI_e5", type: "drive" }
+                ]
             },
             {
                 id: 5,
-                title: "Marchinha dos Sueltos",
-                author: "Fábio Barros / Mari Dalla Vecchia/ Daniel Conti/ Marco Vilane",
-                content: `Eu tô soltinho, eu não me amarro
-eu tô com fogo no rabo (2x)
-
-Pode chover canivete
-pode o mundo acabar
-que esse fogo no rabo
-nunca irá se apagar
-
-que esse fogo no rabo
-nunca irá se apagar
-
-(Vira Marcha-Rancho)
-Sueltos em São Paulo
-puberdade senil
-madrugada adentro
-tudo acaba no Geni
-
-Não monogamia
-é não monotonia (cadê gato mia?)
-o rebuceteio
-é melhor que Netflix!`,
-                links: {}
+                title: "Separado",
+                author: "Demetrius Lulo / Edu Capello / Thiago K",
+                lyrics: `O Chimbinha e a Joelma separaram\nSepararam, separaram\nA Fátima e o Bonner separaram\nSepararam, separaram\nA Sandy e o Junior separaram\nSepararam, separaram\nNeymar e Marquezine separaram\nMas voltaram e separaram\n\nFábio Júnior e a Glória\nTereza, Cristina, Patrícia, Guilhermina,\nMaria e Maria separaram\nSepararam, separaram\n\nTodo mundo junto\nTodo mundo junto\nSeparado, separado, separado\n\nTodo mundo junto\nTodo mundo junto\nSeparado, separado, separado`,
+                chords: `<span class="chord">E</span> <span class="chord">C#7</span> <span class="chord">F#m7</span> <span class="chord">G7(#11)</span>\nO Chimbinha e a Joelma separaram\n<span class="chord">F#m7</span> <span class="chord">B7</span> <span class="chord">E</span> <span class="chord">B7</span>\nSepararam, separaram\n<span class="chord">E</span> <span class="chord">C#7</span> <span class="chord">F#m7</span> <span class="chord">G7(#11)</span>\nA Fátima e o Bonner separaram\n<span class="chord">F#m7</span> <span class="chord">B7</span> <span class="chord">E</span> <span class="chord">B7</span>\nSepararam, separaram\n<span class="chord">E</span> <span class="chord">C#7</span> <span class="chord">F#m7</span> <span class="chord">G7(#11)</span>\nA Sandy e o Júnior separaram\n<span class="chord">F#m7</span> <span class="chord">B7</span> <span class="chord">E</span> <span class="chord">B7</span>\nSepararam, separaram\n<span class="chord">E</span> <span class="chord">C#7</span> <span class="chord">F#m7</span> <span class="chord">G7(#11)</span>\nNeymar e Marquezine separaram\n<span class="chord">F#m7</span> <span class="chord">B7</span> <span class="chord">E</span> <span class="chord">B7</span>\nMas voltaram e separaram\n\n<span class="chord">E</span>\nFábio Júnior e a Glória, Tereza, Cristina, Patrícia, Guilhermina,\n<span class="chord">C#7</span> <span class="chord">F#m7</span> <span class="chord">G7(#11)</span>\nMaria e Maria separaram\n<span class="chord">F#m7</span> <span class="chord">B7</span> <span class="chord">E</span> <span class="chord">B7</span>\nSepararam,    separaram\n(2x)\n\n<span class="chord">E</span>\nTodo mundo junto\nTodo mundo junto\n<span class="chord">F#m7</span> <span class="chord">G7(#11)</span> <span class="chord">F#m7</span> <span class="chord">B7</span>\nSeparado,                     separado,\n<span class="chord">E</span> <span class="chord">B7</span>\nseparado\n(2x)`,
+                audios: [
+                    { title: "Áudio Oficial", id: "1biPu8TKmpPF9ai_z5fh0r5y7uO9G3uo4" }
+                ],
+                videos: [
+                    { title: "Ensaio 1", id: "1zaWKCFiMFmgvbzUMFHJhEw6jhYNLnVVw", type: "drive" }
+                ]
             },
-
-            // --- BLOCO 2: CIFRAS ---
             {
                 id: 6,
-                title: "Bloco do Balacobaco (cifra)",
+                title: "Bloco do Balacobaco",
                 author: "Marco Rio Branco",
-                content: `<div class="chord-block"><span class="chord">TOM: B</span>
-<span class="chord">INTRO (4/4):</span> ||: <span class="chord">E</span> | <span class="chord">B</span> | <span class="chord">F#7</span> <span class="chord">B</span> <span class="chord">B7</span> | <span class="chord">E</span> | <span class="chord">B</span> | <span class="chord">F#7</span> | <span class="chord">B</span> <span class="chord">B7</span> :||</div>
-<span class="chord">E</span>
-Ninguém é de ninguém
-<span class="chord">B</span>             <span class="chord">F#7</span>             <span class="chord">B</span>    <span class="chord">B7</span>
-Mas todo mundo é de todo mundo no carnaval eh
-<span class="chord">E</span>
-Ninguém é de ninguém
-<span class="chord">B</span>             <span class="chord">F#7</span>             <span class="chord">B</span>
-Mas todo mundo é de todo mundo no carnaval
-
-<span class="chord">F#7</span>
-é do Balacobaco, baco, baco, baco
-<span class="chord">B</span>
-baco, baco, baco, baco
-<span class="chord">F#7</span>                     <span class="chord">B</span>
-baco, baco, do balaco baco
-
-<span class="chord">F#7</span>
-é do Balacobaco, baco, baco, baco
-<span class="chord">B</span>
-baco, baco, baco, baco
-<span class="chord">F#7</span>                     <span class="chord">B</span>  <span class="chord">B7</span>
-baco, baco, do balaco baco (Repete do começo)`,
-                links: { youtube: "https://www.youtube.com/watch?v=-HcYPaxUZ0M" }
+                lyrics: `Ninguém é de ninguém\nMas todo mundo\nÉ de todo mundo\nNo carnaval\n\né do balacobaco\nbaco baco baco\nbaco baco baco\nbaco baco baco\ndo balacobaco`,
+                chords: `TOM: B\n\nINTRO: 4/4 ||: <span class="chord">E</span> | <span class="chord">B</span> | <span class="chord">F#7</span> | <span class="chord">B</span> <span class="chord">B7</span> | <span class="chord">E</span> | <span class="chord">B</span> | <span class="chord">F#7</span> | <span class="chord">B</span> <span class="chord">B7</span> :||\n| <span class="chord">E</span> | <span class="chord">B</span> | <span class="chord">F#7</span> | <span class="chord">F#7</span> | <span class="chord">F#7</span> | <span class="chord">B</span> <span class="chord">B7</span> |\n\n<span class="chord">E</span>\nNinguém é de ninguém\n<span class="chord">B</span> <span class="chord">F#7</span> <span class="chord">B</span> <span class="chord">B7</span>\nMas todo mundo é de todo mundo no carnaval eh\n<span class="chord">E</span>\nNinguém é de ninguém\n<span class="chord">B</span> <span class="chord">F#7</span> <span class="chord">B</span>\nMas todo mundo é de todo mundo no carnaval\n\n<span class="chord">F#7</span>\né do Balacobaco, baco, baco, baco\n<span class="chord">B</span>\nbaco, baco, baco, baco\n<span class="chord">F#7</span> <span class="chord">B</span>\nbaco, baco, do balaco baco\n\n<span class="chord">F#7</span>\né do Balacobaco, baco, baco, baco\n<span class="chord">B</span>\nbaco, baco, baco, baco\n<span class="chord">F#7</span> <span class="chord">B</span> <span class="chord">B7</span>\nbaco, baco, do balaco baco (repete do começo)`,
+                audios: [
+                    { title: "Áudio Oficial", id: "1Xp4SqCYh6JVdgc2GF4-M25iiNLf75Z5U" }
+                ],
+                videos: []
             },
             {
                 id: 7,
-                title: "Separado (cifra)",
-                author: "Demetrius Lulo / Edu Capello / Thiago K",
-                content: `<span class="chord">E</span>              <span class="chord">Db7</span>        <span class="chord">F#m7</span>     <span class="chord">Db7</span>
-O Chimbinha e a Joelma separaram
-<span class="chord">F#m7</span>        <span class="chord">Db7</span>     <span class="chord">E</span>     <span class="chord">Db7</span>     <span class="chord">E</span>
-Separaram,          separaram
-
-<span class="chord">B7</span>                <span class="chord">F#m7</span>      <span class="chord">Db7</span>
-A Fátima e o Bonner separaram
-<span class="chord">F#m7</span>        <span class="chord">Db7</span>     <span class="chord">E</span>     <span class="chord">Db7</span>     <span class="chord">E</span>
-Separaram,          separaram
-
-<span class="chord">F#m7</span>   <span class="chord">Db7</span>    <span class="chord">B7</span>         <span class="chord">F#m7</span>  <span class="chord">Db7</span>
-A Sandy e o Junior separaram
-<span class="chord">E</span>
-Separaram, separaram
-
-<span class="chord">E</span>          <span class="chord">Db7</span>    <span class="chord">B7</span>         <span class="chord">F#m7</span>   <span class="chord">Db7</span>
-Neymar e Marquezine separaram
-<span class="chord">F#m7</span>  <span class="chord">Db7</span>           <span class="chord">E</span>         <span class="chord">B7</span>
-Mas voltaram      e separaram
-
-<span class="chord">E</span>
-Fábio Júnior e a Glória
-Tereza, Cristina, Patrícia, Guilhermina,
-<span class="chord">Db7</span>             <span class="chord">F#m7</span>
-Maria e Maria separaram
-<span class="chord">F#m7</span>  <span class="chord">Db7</span>     <span class="chord">Db7</span>      <span class="chord">E</span>       <span class="chord">B7</span>
-Separaram,    separaram
-
-<span class="chord">E</span>
-Todo mundo junto
-Todo mundo junto
-<span class="chord">F#m7</span>       <span class="chord">Db7</span>     <span class="chord">F#m7</span>      <span class="chord">Db7</span>
-Separado,          separado,
-<span class="chord">E</span>          <span class="chord">B7</span>
-separado
-
-<span class="chord">E</span>
-Todo mundo junto
-Todo mundo junto
-<span class="chord">F#m7</span>       <span class="chord">Db7</span>     <span class="chord">F#m7</span>      <span class="chord">Db7</span>
-Separado,          separado,
-<span class="chord">E</span>          <span class="chord">B7</span>
-separado`,
-                links: { youtube: "https://www.youtube.com/watch?v=w5c9KEflWTw" }
+                title: "De Graça ou Pagando",
+                author: "Gabriel De Angelo / Pedro Henrique Dos Reis Silva Silva",
+                lyrics: `Ela (ele) terminou comigo falando que\neu não ia encontrar ninguém melhor, oh, dó!\nEla (ele) só se esqueceu\nque no Bloco dos Sueltos mais ninguém fica só\n\nTem gente demais no mundo\nPra você se achar a foda\nPelo amor de Deus, se toca\nEu tentei ser mono, já que cê não quis\neu vou pro Geni agora! Esquece não!\n\nNão é só sua pepeca que tem mel\nNão é só sua boca que sabe levar pro céu\nHoje eu vou sair, vou atrás de um consuelo\nvou no Bloco dos Sueltos\n\nNão é só sua piroca que tem mel\nNão é só sua boca que sabe levar pro céu\nHoje eu vou sair, vou atrás de um consuelo\nvou no Bloco dos Sueltos`,
+                chords: `<span class="chord">A</span> <span class="chord">C#m</span>\nEla (ele) terminou comigo falando que eu \n<span class="chord">E</span> <span class="chord">B</span>\nnão ia encontrar ninguém melhor, oh, dó!\n<span class="chord">A</span> <span class="chord">C#m</span>\nela (ele) só se esqueceu\n<span class="chord">E</span> <span class="chord">B</span>\nque no Bloco dos Sueltos mais ninguém fica só\n<span class="chord">A</span> <span class="chord">C#m</span>\ntem gente demais no mundo pra você se achar a foda\n<span class="chord">E</span> <span class="chord">B</span>\npelo amor de Deus, se toca\n<span class="chord">A</span> <span class="chord">C#m</span>\nEu tentei ser mono, já que cê não quis\n<span class="chord">E</span> <span class="chord">B</span>\neu vou pro Geni agora! Esquece não!\n<span class="chord">A</span>\nNão é só sua pepeca que tem mel \n<span class="chord">C#m</span> <span class="chord">B</span>\nNão é só sua boca que sabe levar pro céu\n<span class="chord">A</span> <span class="chord">C#m</span> <span class="chord">E</span>\nHoje eu vou sair, vou atrás de um consuelo\n<span class="chord">B</span>\nvou no Bloco dos Sueltos\n<span class="chord">A</span>\nNão é só sua piroca que tem mel\n<span class="chord">C#m</span> <span class="chord">B</span>\nNão é só sua boca que sabe levar pro céu\n<span class="chord">A</span> <span class="chord">C#m</span> <span class="chord">E</span>\nHoje eu vou sair, vou atrás de um consuelo\n<span class="chord">B</span>\nvou no Bloco dos Sueltos`,
+                audios: [
+                    { title: "Áudio Oficial", id: "13GInlvNaB4C1eovdoL3yvWD2YkeIoVMc" }
+                ],
+                videos: [
+                    { title: "Cortejo 2025", id: "1Z1Qvw6ZZFiW9ZyHWg0JgeJcYbbGYbzp-", type: "drive" },
+                    { title: "Ensaio 1", id: "1pmGbFXaMIW-UfaHeWB4iVnRDK86FEqIQ", type: "drive" }
+                ]
             },
             {
                 id: 8,
-                title: "De Graça ou Pagando (cifra)",
-                author: "Gabriel De Angelo / Pedro Henrique Dos Reis Silva Silva",
-                content: `<div class="chord-block"><span class="chord">INTRO (4/4):</span> ||: <span class="chord">A</span> | <span class="chord">C#m</span> | <span class="chord">E</span> | <span class="chord">B</span> :||</div>
-<span class="chord">A</span>                 <span class="chord">C#m</span>
-Ela terminou comigo Falando que eu
-<span class="chord">E</span>                 <span class="chord">B</span>
-Não ia encontrar ninguém melhor, ô dó
-<span class="chord">A</span>                 <span class="chord">C#m</span>
-Ela só se esqueceu que em dois mil e
-<span class="chord">E</span>                 <span class="chord">B</span>
-Vinte e quatro ninguém fica só
-
-<span class="chord">A</span>
-Tem gente demais no mundo
-<span class="chord">C#m</span>
-Pra você se achar a foda
-<span class="chord">E</span>                  <span class="chord">B</span>
-Pelo amor de deus, se toca
-
-<span class="chord">A</span>
-Eu tentei ser seu
-<span class="chord">C#m</span>
-Já que cê não quis
-<span class="chord">E</span>                <span class="chord">B</span>
-Então sou das do job agora
-
-<span class="chord">A</span>
-Não é só sua pepeca que tem mel
-<span class="chord">C#m</span>                         <span class="chord">B</span>
-Não é só sua boca que sabe levar pro céu
-<span class="chord">A</span>
-Hoje eu vou sair
-<span class="chord">C#m</span>            <span class="chord">E</span>
-Vou atrás de uns te amo
-<span class="chord">B</span>
-De graça ou pagando, ô
-
-<span class="chord">A</span>
-Não é só sua pepeca que tem mel
-<span class="chord">C#m</span>                         <span class="chord">B</span>
-Não é só sua boca que sabe levar pro céu
-<span class="chord">A</span>
-Hoje eu vou sair
-<span class="chord">C#m</span>              <span class="chord">E</span>
-Deixar meu corpo suando
-<span class="chord">B</span>                                     <span class="chord">A</span>
-De graça ou pagando, de graça ou pagando
-
-<span class="chord">C#m</span>    <span class="chord">E</span>        <span class="chord">B</span>
-Óóô,   óóô, vou te esquecer
-<span class="chord">A</span>
-De graça ou pagando (2X)`,
-                links: {
-                    youtube: "https://www.youtube.com/watch?v=LjgdmQvJQ70",
-                    spotify: "https://open.spotify.com/intl-pt/track/6m51sam9gIqRMbJEKW4ADe?si=83722a09f8974657"
-                }
-            },
-            {
-                id: 9,
-                title: "Não Sou Obrigada (cifra)",
-                author: "Pocah",
-                content: `<span class="chord">Bm7</span>
-Ah, tá bom, agora quer mandar em mim
-<span class="chord">Bbdim</span>
-Coitadin', não passa de um contatin'
-<span class="chord">Bm7</span>
-Abaixa o tom, respeita a mamãe aqui
-<span class="chord">Bbdim</span>
-Olha ele todo, todo se achando, 'tá metendo o louco
-<span class="chord">Bm7</span>
-Daqui a pouco eu vou fazer que nem eu fiz com o outro
-<span class="chord">Bbdim</span>
-Se quando eu danço te incomoda, amor, eu acho é pouco
-Ai, que ranço!
-
-<span class="chord">Bm7</span>                  <span class="chord">Bbdim</span>
-Deixa eu te lembrar que eu não sou obrigada a nada
-<span class="chord">Bm7</span>             <span class="chord">Bbdim</span>
-Ninguém manda nessa raba
-<span class="chord">Bm7</span>                      <span class="chord">Bbdim</span>
-Uma bunda dessa não nasceu pra ser mandada
-<span class="chord">Bm7</span>             <span class="chord">Bbdim</span>
-Ninguém manda nessa raba
-
-<span class="chord">Bm7</span>
-Olha como ele baba
-<span class="chord">Bbdim</span>
-Oi, baba, baby, nessa raba
-Oi, baba, baby, baba
-<span class="chord">Bm7</span>
-Oi, dá um close nessa raba
-<span class="chord">Bbdim</span>
-Oi, baba, baby, baba
-Oi, baba, baby
-<span class="chord">Bm7</span>             <span class="chord">Bbdim</span>
-Ninguém manda nessa raba`,
-                links: { youtube: "https://www.youtube.com/watch?v=HutLSVbLWHM" }
+                title: "Rola Reborn",
+                author: "Sueltos em SP",
+                lyrics: `cê não tá ligado na mais nova novidade\nchegou pra abalar a machulência da cidade\né fácil de explicar, já vou te falar o nome\nmas já posso adiantar, nunca mais procure um home\n\nmas pra que home? mas pra que home?\nvamo lançar a nova rola reborn\nmas pra que home? mas pra que home?\nvamo lançar a nova rola reborn\n\nrola reborn, rola reborn\ntocando uma e comendo popcorn\nrola reborn com popcorn\ntocando duas e fazendo video porn\n\npo-po-pode parar de chamar pra ver um netflix\nque eu não caio nesse golpe nem se me fizer um pix\n\nse chorar manda áudio, vira meme, vê se pode\ncê é só um esquerdomacho três estrelas lá no meu app do ifode\nai fode, ai ai ai, ai fode\n\nesse é o tempo da caça que te come com a colher\nque cê não meteu nos parça, cê nem gosta de mulher\n\nentão fica triste não com o novo natural\nfaz tempo que cê não é mais a peça principal\npau pau pau pau pau\n\n(volta pro refrão)`,
+                chords: ``,
+                audios: [
+                    { title: "Áudio Oficial", id: "1wPv6bc50OxlJiSpZKDLGsOYnfFoB7_lP" }
+                ],
+                videos: []
             },
             {
                 id: 10,
                 title: "Marchinha dos Sueltos (cifra)",
                 author: "Fábio Barros / Mari Dalla Vecchia/ Daniel Conti/ Marco Vilane",
-                content: `<div class="chord-block">(Começa Marchinha)</div>
+                chords: `<div class="chord-block">(Começa Marchinha)</div>
 <span class="chord">Am7</span>
 Eu tô soltinho, eu não me amarro
 <span class="chord">Bm7(b5)</span>        <span class="chord">E7</span>
@@ -889,7 +711,7 @@ o rebuceteio
                 id: 11,
                 title: "Duende de Durepox (cifra)",
                 author: "Mari Dalla Vecchia / Daniel Conti",
-                content: `<span class="chord">Am</span>        <span class="chord">Bb</span>           <span class="chord">C</span>
+                chords: `<span class="chord">Am</span>        <span class="chord">Bb</span>           <span class="chord">C</span>
 Foi no bloco dos sueltos que
 <span class="chord">C</span>                     <span class="chord">Bb</span>      <span class="chord">Am</span>
 Conheci uma jovem mística
@@ -912,102 +734,165 @@ Saia indiana, duende de durepox`,
             }
         ];
 
-        // --- LÓGICA DO APP ---
-        const songListEl = document.getElementById('song-list');
-        const contentDisplay = document.getElementById('content-display');
-        const sidebar = document.getElementById('sidebar');
-        const searchInput = document.getElementById('search-input');
+        // --- RENDERIZAÇÃO DOS MENUS ---
+        function renderMenus() {
+            const lyricsMenu = document.getElementById('lyrics-menu');
+            const chordsMenu = document.getElementById('chords-menu');
+            const videosMenu = document.getElementById('videos-menu');
 
-        function renderSidebar(list) {
-            songListEl.innerHTML = '';
-            if(list.length === 0) {
-                songListEl.innerHTML = '<div style="padding:20px; text-align:center; color:#999">Nenhuma música encontrada</div>';
-                return;
-            }
-            list.forEach(song => {
+            // 1. Renderizar Menu Letras (Todas)
+            repertoire.forEach(song => {
+                // Only show in lyrics menu if lyrics exist
+                if (song.lyrics) {
+                    const item = document.createElement('div');
+                    item.className = 'song-item';
+                    item.innerHTML = `🎵 ${song.title}`;
+                    item.onclick = () => loadContent(song.id, 'lyrics');
+                    lyricsMenu.appendChild(item);
+                }
+            });
+
+            // 2. Renderizar Menu Cifras (Apenas se tiver cifra)
+            repertoire.filter(s => s.chords).forEach(song => {
                 const item = document.createElement('div');
                 item.className = 'song-item';
-                item.onclick = () => selectSong(song, item);
-                
-                // Texto preview (limpa tags HTML)
-                const plainText = song.content.replace(/<[^>]*>?/gm, ' ');
-                const preview = plainText.substring(0, 35).trim() + '...';
+                item.innerHTML = `🎼 ${song.title}`;
+                item.onclick = () => loadContent(song.id, 'chords');
+                chordsMenu.appendChild(item);
+            });
 
-                item.innerHTML = `
-                    <div>
-                        <h3>${song.title}</h3>
-                        <p>${preview}</p>
-                    </div>
-                    <span style="color:var(--primary-gold); font-size:1.2rem">›</span>
-                `;
-                songListEl.appendChild(item);
+            // 3. Renderizar Menu Vídeos (Apenas se tiver vídeo listado)
+            repertoire.filter(s => s.videos && s.videos.length > 0).forEach(song => {
+                const item = document.createElement('div');
+                item.className = 'song-item';
+                item.innerHTML = `🎥 ${song.title}`;
+                item.onclick = () => loadContent(song.id, 'video');
+                videosMenu.appendChild(item);
             });
         }
 
-        function selectSong(song, element) {
-            // Atualiza seleção visual
-            document.querySelectorAll('.song-item').forEach(el => el.classList.remove('active'));
-            if(element) element.classList.add('active');
-
-            // Resetar o tom ao abrir nova música
-            currentTransposition = 0;
-
-            // Gera botões de link com ícones
-            let linksHtml = '';
+        // --- FUNÇÃO DE MUDANÇA DE CONTEÚDO ---
+        function loadContent(id, type) {
+            const song = repertoire.find(s => s.id === id);
+            const display = document.getElementById('content-display');
             
-            // Controle de Tom (Aparece apenas para IDs > 5, que são as cifras)
-            let toneControlHtml = '';
-            if (song.id > 5) {
-                toneControlHtml = `
-                    <div class="tone-controls" style="display:flex;">
+            // Remove active de todos
+            document.querySelectorAll('.song-item').forEach(el => el.classList.remove('active'));
+            // Adiciona (visual apenas, difícil mapear qual item exato foi clicado sem ref maior, mas ok)
+
+            currentTransposition = 0; // Resetar tom
+
+            let headerContent = `
+                <div class="header-left">
+                    <img src="image_d0e8af.jpg" alt="Logo Pequeno" class="header-logo" onerror="this.style.display='none'">
+                    <div>
+                        <span class="category-badge">${type === 'lyrics' ? 'Letra' : type === 'chords' ? 'Cifra' : 'Vídeos'}</span>
+                        <h2 class="song-title-display">${song.title}</h2>
+                        <span class="composers">(${song.author})</span>
+                    </div>
+                </div>
+                <div class="header-icons">
+            `;
+
+            let bodyContent = '';
+
+            // --- Lógica de Player de Áudio Incorporado (USANDO IFRAME PREVIEW) ---
+            // IMPORTANTE: Isso resolve o problema do "0:00" usando o player nativo do Google
+            let audioPlayersHtml = '';
+            if (song.audios && song.audios.length > 0) {
+                song.audios.forEach(audio => {
+                    if (audio.id) {
+                        const drivePreviewLink = `https://drive.google.com/file/d/${audio.id}/preview`;
+                        audioPlayersHtml += `
+                            <div class="media-player-container">
+                                <span class="media-title">🎧 ${audio.title}</span>
+                                <iframe src="${drivePreviewLink}" class="audio-iframe" allow="autoplay"></iframe>
+                            </div>
+                        `;
+                    }
+                });
+            } else if (type === 'lyrics' || type === 'chords') {
+                // Se não tiver áudio cadastrado, mostra botão genérico
+                audioPlayersHtml = `
+                    <div style="margin-bottom:15px; font-size:0.8rem; color:#666;">
+                        <em>Sem áudio cadastrado para player.</em> <br>
+                        <a href="${AUDIO_FOLDER}" target="_blank" style="color:var(--primary-blue)">Abrir pasta geral</a>
+                    </div>
+                `;
+            }
+
+            if (type === 'lyrics') {
+                headerContent += `</div>`;
+                // Adiciona o player antes da letra
+                bodyContent = `${audioPlayersHtml}<div class="lyrics-display">${song.lyrics}</div>`;
+            
+            } else if (type === 'chords') {
+                // Controles de tom
+                headerContent += `
+                    <div class="tone-controls">
                         <button class="tone-btn" onclick="changeTone(-1)">-</button>
                         <span class="tone-display" id="tone-value">Tom</span>
                         <button class="tone-btn" onclick="changeTone(1)">+</button>
                     </div>
-                `;
-            }
+                </div>`;
+                // Adiciona o player antes da cifra
+                bodyContent = `${audioPlayersHtml}<div class="lyrics-display">${song.chords}</div>`;
+            
+            } else if (type === 'video') {
+                headerContent += `
+                    <a href="${VIDEO_FOLDER}" target="_blank" class="drive-btn" style="background:#ffcccc; border-color:#ffaaaa;">
+                        ▶️ Pasta de Vídeos
+                    </a>
+                </div>`;
+                
+                // --- Lógica de Vídeo Embedado ---
+                let videoListHtml = '<div style="margin-top:20px;">';
+                song.videos.forEach(v => {
+                    videoListHtml += `<div class="media-player-container">`;
+                    videoListHtml += `<span class="media-title">🎥 ${v.title}</span>`;
+                    
+                    if (v.type === 'drive') {
+                        // Embed de Google Drive
+                        videoListHtml += `
+                            <div class="video-wrapper">
+                                <iframe src="https://drive.google.com/file/d/${v.id}/preview" allow="autoplay"></iframe>
+                            </div>
+                        `;
+                    } else if (v.type === 'link') {
+                        // Link Externo (Instagram/YouTube se não for embed)
+                        videoListHtml += `
+                            <div style="padding:20px; text-align:center; background:#eee; border-radius:8px;">
+                                <p>Este vídeo deve ser aberto externamente:</p>
+                                <a href="${v.url}" target="_blank" class="drive-btn" style="background:var(--primary-blue); color:white;">
+                                    Abrir Vídeo
+                                </a>
+                            </div>
+                        `;
+                    }
+                    videoListHtml += `</div>`;
+                });
+                videoListHtml += '</div>';
 
-            if (song.links.youtube) {
-                linksHtml += `
-                    <a href="${song.links.youtube}" target="_blank" class="icon-link yt-icon" title="Ver no YouTube">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                        </svg>
-                    </a>`;
-            }
-            if (song.links.spotify) {
-                linksHtml += `
-                    <a href="${song.links.spotify}" target="_blank" class="icon-link sp-icon" title="Ouvir no Spotify">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S16.6 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.161 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-                        </svg>
-                    </a>`;
-            }
-
-            // Informação do autor
-            const authorHtml = song.author ? `<span class="composers">(${song.author})</span>` : '';
-
-            // Renderiza conteúdo
-            contentDisplay.innerHTML = `
-                <div class="content-header">
-                    <div class="header-left">
-                        <img src="image_d0e8af.jpg" alt="Logo Pequeno" class="header-logo" onerror="this.style.display='none'">
-                        <div>
-                            <h2 class="song-title-display">${song.title}</h2>
-                            ${authorHtml}
+                bodyContent = `
+                    <div class="lyrics-display video-list-display">
+                        ${videoListHtml}
+                        <div style="margin-top:30px; text-align:center;">
+                            <a href="${VIDEO_FOLDER}" target="_blank" class="drive-btn" style="padding:15px 30px; font-size:1rem;">
+                                Abrir Pasta do Google Drive
+                            </a>
                         </div>
-                    </div>
-                    <div class="header-icons">
-                        ${toneControlHtml}
-                        ${linksHtml}
-                    </div>
+                    </div>`;
+            }
+
+            display.innerHTML = `
+                <div class="content-header">
+                    ${headerContent}
                 </div>
-                <div class="lyrics-display">${song.content}</div>
+                ${bodyContent}
             `;
 
-            // PREPARAÇÃO PARA TRANSPOSIÇÃO
-            // Armazena o acorde original no atributo data-original para evitar erros de soma sucessiva
-            if (song.id > 5) {
+            // Setup para transposição se for cifra
+            if (type === 'chords') {
                 const chords = document.querySelectorAll('.chord');
                 chords.forEach(el => {
                     el.dataset.original = el.innerText;
@@ -1018,48 +903,53 @@ Saia indiana, duende de durepox`,
             if(window.innerWidth <= 768) {
                 sidebar.classList.add('hidden');
             }
-            
-            // Rola para o topo do conteúdo
             document.getElementById('main-content').scrollTop = 0;
         }
 
-        // --- FUNÇÃO PARA MUDAR O TOM ---
-        function changeTone(steps) {
-            currentTransposition += steps;
-            
-            // Atualiza display visual do tom (+1, -2, etc)
-            const toneDisplay = document.getElementById('tone-value');
-            if (toneDisplay) {
-                let sign = currentTransposition > 0 ? '+' : '';
-                toneDisplay.innerText = currentTransposition === 0 ? 'Tom' : `${sign}${currentTransposition}`;
-            }
-
-            // Atualiza todos os acordes na tela
-            const chordElements = document.querySelectorAll('.chord');
-            chordElements.forEach(el => {
-                // Sempre calcula a partir do original para evitar distorção
-                const originalChord = el.dataset.original || el.innerText;
-                if(!el.dataset.original) el.dataset.original = originalChord; // Salva se não existir
-                
-                el.innerText = transposeChord(originalChord, currentTransposition);
-            });
+        // --- LÓGICA DE INTERFACE ---
+        const sidebar = document.getElementById('sidebar');
+        
+        function toggleMenu(menuId) {
+            const menu = document.getElementById(menuId);
+            menu.classList.toggle('open');
         }
 
         function showSidebar() {
             sidebar.classList.remove('hidden');
         }
 
-        searchInput.addEventListener('input', (e) => {
+        function changeTone(steps) {
+            currentTransposition += steps;
+            const toneDisplay = document.getElementById('tone-value');
+            if (toneDisplay) {
+                let sign = currentTransposition > 0 ? '+' : '';
+                toneDisplay.innerText = currentTransposition === 0 ? 'Tom' : `${sign}${currentTransposition}`;
+            }
+            const chordElements = document.querySelectorAll('.chord');
+            chordElements.forEach(el => {
+                const originalChord = el.dataset.original || el.innerText;
+                if(!el.dataset.original) el.dataset.original = originalChord;
+                el.innerText = transposeChord(originalChord, currentTransposition);
+            });
+        }
+
+        // Busca
+        document.getElementById('search-input').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = songs.filter(s => 
-                s.title.toLowerCase().includes(term) || 
-                s.content.toLowerCase().includes(term)
-            );
-            renderSidebar(filtered);
+            const items = document.querySelectorAll('.song-item');
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                if(text.includes(term)) {
+                    item.style.display = 'flex';
+                    item.parentElement.classList.add('open');
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         });
 
         // Inicialização
-        renderSidebar(songs);
+        renderMenus();
 
     </script>
 </body>
