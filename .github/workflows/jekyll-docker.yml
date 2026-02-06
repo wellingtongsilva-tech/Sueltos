@@ -18,7 +18,10 @@ jobs:
         docker run \
         -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
         jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
-
+    - name: Upload artifact # <-- NOVO PASSO ADICIONADO AQUI
+      uses: actions/upload-pages-artifact@v4 # Use a ação oficial para Pages
+      with:
+        path: './_site' # O caminho onde o Jekyll gerou o site   
   deploy:
     # Define as permissões para o GITHUB_TOKEN para permitir o deploy no GitHub Pages
     permissions:
